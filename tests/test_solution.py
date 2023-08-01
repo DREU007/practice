@@ -43,7 +43,6 @@ def test_normal_game1():
 
 def test_normal_game2():
     game = TicTacToe('normal')
-    # from ipdb import set_trace; set_trace()
     game.go()
     game.go(2, 1)
     game.go()

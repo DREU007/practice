@@ -22,7 +22,7 @@ class TicTacToe():
 
         self.computer = Difficulty(self.symbols['player2'])
 
-    def go(self, x=None, y=None):
+    def go(self, y=None, x=None):
         if x == y is None:
             y, x = self.computer.move(self.field)
             sym = self.symbols['player2']
@@ -44,10 +44,13 @@ class TicTacToe():
     def _check_line(self, line):
         return (line.count(self.symbols['player1']) == len(line)
                 or line.count(self.symbols['player2']) == len(line))
-        
 
     def _get_diagonal_lines(self):
         fdiag = [line[i] for i, line in enumerate(self.field)]
         bdiag = [line[-i-1] for i, line in enumerate(self.field)]
         return [fdiag, bdiag]
+
+    def __repr__(self):
+        output = '\n'.join([' '.join(map(str, line)) for line in self.field])
+        return '\n' + output + '\n'
 # END

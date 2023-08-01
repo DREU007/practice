@@ -10,3 +10,6 @@ test:
 
 test-dbug:
 	poetry run pytest -s
+
+lint:
+	poetry run flake8 solution.py tests strategies

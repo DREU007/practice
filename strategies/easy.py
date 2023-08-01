@@ -6,16 +6,15 @@ class Easy():
     def move(self, field):
         length = len(field)
         columns = list(zip(*field))
-        print(f"\n{field=}\n{columns=}")
-        for y in range(length):
-            if self._check_line(field[y]): 
-                for x, char in enumerate(field[y]):
+        for line in range(length):
+            if self._check_line(field[line]):
+                for column, char in enumerate(field[line]):
                     if char is None:
-                        return y, x
-            elif self._check_line(columns[y]):
-                for x, char in enumerate(columns[y]):
+                        return line, column
+            elif self._check_line(columns[line]):
+                for column, char in enumerate(columns[line]):
                     if char is None:
-                        return x, y
+                        return column, line
 
     def _check_line(self, line):
         return all(map(
