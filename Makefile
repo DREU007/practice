@@ -3,7 +3,7 @@ run:
 	poetry run ipython solution.py
 
 dbug:
-	poetry run python -m ipdb solution.py
+	poetry run python -m pudb solution.py
 
 test:
 	poetry run pytest -vvv
