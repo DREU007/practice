@@ -32,6 +32,7 @@ def test_easy_game3():
 
 def test_normal_game1():
     game = TicTacToe('normal')
+    import pudb; pudb.set_trace()
     game.go(0, 2)
     game.go()
     game.go(0, 1)

@@ -9,48 +9,44 @@ class TicTacToe():
             [None, None, None],
             [None, None, None],
         ]
-# BEGIN (write your solution here)
-        self.symbols = {
-            'player1': 'x',
-            'player2': 'o'
-        }
+# BEGIN
+        if level == 'easy':
+            self.strategy = Easy()
+        if level == 'normal':
+            self.strategy = Normal()
 
-        Difficulty = {
-            'easy': Easy,
-            'normal': Normal
-        }.get(level)
 
-        self.computer = Difficulty(self.symbols['player2'])
+    def go(self, row=None, col=None):
+        if row is None and col is None:
+            row, col = self.strategy.get_next_step(self.field)
+            self.field[row][col] = 'AI'
+            return self.is_winner('AI')
 
-    def go(self, y=None, x=None):
-        if x == y is None:
-            y, x = self.computer.move(self.field)
-            sym = self.symbols['player2']
-        else:
-            sym = self.symbols['player1']
-        self._set_char(y, x, sym)
-        return self._is_winner()
+        self.field[row][col] = 'Player'
+        return self.is_winner('Player')
 
-    def _set_char(self, y, x, sym):
-        self.field[y][x] = sym
+    def is_winner(self, type):
+        horizontal = self.field
+        vertical = list(map(list, zip(*horizontal)))
+        diagonal1 = [self.field[0][0], self.field[1][1], self.field[2][2]]
+        diagonal2 = [self.field[2][0], self.field[1][1], self.field[0][2]]
 
-    def _is_winner(self):
-        return any((
-            *map(self._check_line, self.field),
-            *map(self._check_line, zip(*self.field)),
-            *map(self._check_line, self._get_diagonal_lines())
-        ))
+        for row in horizontal:
+            if self.has_player_placed_all_the_marks(row, type):
+                return True
 
-    def _check_line(self, line):
-        return (line.count(self.symbols['player1']) == len(line)
-                or line.count(self.symbols['player2']) == len(line))
+        for column in vertical:
+            if self.has_player_placed_all_the_marks(column, type):
+                return True
 
-    def _get_diagonal_lines(self):
-        fdiag = [line[i] for i, line in enumerate(self.field)]
-        bdiag = [line[-i-1] for i, line in enumerate(self.field)]
-        return [fdiag, bdiag]
+        if self.has_player_placed_all_the_marks(diagonal1, type):
+            return True
+        if self.has_player_placed_all_the_marks(diagonal2, type):
+            return True
 
-    def __repr__(self):
-        output = '\n'.join([' '.join(map(str, line)) for line in self.field])
-        return '\n' + output + '\n'
+        return False
+
+    def has_player_placed_all_the_marks(self, row, type):
+        return all(value == type for value in row)
 # END
+
