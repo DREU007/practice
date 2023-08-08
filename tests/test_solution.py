@@ -1,64 +1,65 @@
-from solution import TicTacToe
-
-def test_easy_game1():
-    game = TicTacToe()
-    game.go(1, 1)
-    game.go()
-    game.go(0, 1)
-    game.go()
-    is_winner = game.go(2, 1)
-    assert is_winner
-
-def test_easy_game2():
-    game = TicTacToe()
-    game.go(1, 1)
-    game.go()
-    game.go(1, 2)
-    assert not game.go()
-    assert not game.go(2, 2)
-    is_winner = game.go()
-    assert is_winner
+from solution import find_the_cheapest_service 
+import json 
+import pytest 
+import pathlib
 
 
-def test_easy_game3():
-    game = TicTacToe()
-    game.go(0, 0)
-    game.go()
-    assert not game.go(1, 1)
-    assert not game.go()
-    is_winner = game.go(2, 2)
-    assert is_winner
+@pytest.fixture() 
+def data(): 
+    with open(pathlib.Path(__file__).parent / 'data.json') as f: 
+        return json.loads(f.read())
 
 
-def test_normal_game1():
-    game = TicTacToe('normal')
-    game.go(0, 2)
-    game.go()
-    game.go(0, 1)
-    assert not game.go()
-    assert not game.go(1, 2)
-    is_winner = game.go()
-    assert is_winner
+def test_with_min_max(data): 
+    # import pudb; pudb.set_trace()
+    expected = { 
+        'hotel': {'cost': 616, 'name': 'python_inn'}, 
+        'service': 'kostrovok' 
+    } 
+
+    predicates = {'min': 600, 'max': 800} 
+    result = find_the_cheapest_service(data, predicates) 
+    assert result == expected
+    
+    
+    expected2 = { 
+        'hotel': {'cost': 672, 'name': '$phpInn'}, 
+        'service': 'kostrovok' 
+        } 
+        
+    predicates2 = {'min': 650, 'max': 700} 
+    result2 = find_the_cheapest_service(data, predicates2) 
+    assert result2 == expected2
 
 
-def test_normal_game2():
-    game = TicTacToe('normal')
-    game.go()
-    game.go(2, 1)
-    game.go()
-    game.go(1, 0)
-    assert not game.go()
-    assert not game.go(1, 2)
-    is_winner = game.go()
-    assert is_winner
+def test_with_only_min(data): 
+    expected = { 
+        'hotel': {'cost': 802.5, 'name': 'JavaInn'}, 
+        'service': 'book-king' 
+    } 
+    
+    predicates = {'min': 800} 
+    result = find_the_cheapest_service(data, predicates) 
+    assert result == expected
 
 
-def test_normal_game3():
-    game = TicTacToe('normal')
-    game.go(2, 2)
-    game.go()
-    assert not game.go(1, 1)
-    assert not game.go()
-    is_winner = game.go(0, 0)
-    assert is_winner
+def test_with_only_max(data): 
+    expected = { 
+        'hotel': {'cost': 500, 'name': 'python_inn'}, 
+        'service': 'airdnb' 
+    } 
+    
+    predicates = {'max': 570} 
+    result = find_the_cheapest_service(data, predicates) 
+    assert result == expected
 
+
+def test_with_nothing(data): 
+    expected = { 
+        'hotel': {'cost': 500, 'name': 'python_inn'}, 
+        'service': 'airdnb' 
+    } 
+    
+    predicates = {} 
+    result = find_the_cheapest_service(data, predicates) 
+    assert result == expected
